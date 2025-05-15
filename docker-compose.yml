@@ -27,5 +27,15 @@ services:
     environment:
       - AUTH_URL=http://auth:3000
 
+  event:
+    build: ./event
+    ports:
+      - '3002:3000'
+    depends_on:
+      - mongo
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/event
+
+
 volumes:
   mongo-data:

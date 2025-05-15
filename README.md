@@ -36,8 +36,30 @@ docker-compose up --build
 <br>
 
 ## 🧩 과제 개요
-프로젝트 구조
+프로젝트 구조  
 서버 구성
 
 ## 🔧 기능 상세
-서버 별 구체적 기능
+프로젝트 구조
+| 서버 | 역할 |
+| - | - |
+| auth | 유저 등록, 로그인, JWT 발급 |
+| gateway | API 요청 진입 + 인증/인가 |
+| event | (이벤트 등록 / 이벤트 관련) |
+
+<br>
+
+Auth Server
+| Method | URI | 설명 |
+| - | - | - |
+| POST | /signup | 회원가입 |
+| POST | /login | 로그인 |
+
+<br>
+
+Gateway Server
+| Method | URI | 권한 | 설명 |
+| - | - | - | - |
+| GET | /secure | User, ADMIN | 로그인한 유저만 접근 가능 (JWT 필요) |
+
+Event Server
