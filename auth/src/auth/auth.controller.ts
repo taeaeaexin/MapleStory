@@ -43,7 +43,11 @@ export class AuthController {
       throw new HttpException('이메일 또는 비밀번호가 틀렸습니다.', HttpStatus.UNAUTHORIZED);
     }
 
-    const payload = { sub: user._id, role: user.role };
+    const payload = {
+      sub: user._id,
+      role: user.role,
+      email: user.email,
+    };
     const token = this.jwtService.sign(payload);
 
     return {

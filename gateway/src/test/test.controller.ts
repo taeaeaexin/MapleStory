@@ -2,6 +2,7 @@ import { Controller, Get, Req, UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../common/jwt-auth.guard';
 import { RolesGuard } from '../common/roles.guard';
 import { Roles } from '../common/roles.decorator';
+import { Role } from 'src/common/roles.enum';
 
 @Controller('test')
 export class TestController {
@@ -16,7 +17,7 @@ export class TestController {
 
   @Get('admin')
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Roles('ADMIN')
+  @Roles(Role.ADMIN)
   getAdmin(@Req() req) {
     return {
       message: 'ADMIN 전용 API 접근 성공',
