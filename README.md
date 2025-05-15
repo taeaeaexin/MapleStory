@@ -16,6 +16,13 @@ docker-compose up --build
 
 <br>
 
+## 🧠 설계 의도
+- MSA 구조로 auth, event, gateway를 분리하여 유지보수성과 확장성 높임
+- JWT 왜 사용? Role 기반 권한 분리
+- 이벤트 설계, 조건 검증 방식, API 구조 선택 이유, 구현 중 겪은 고민 등
+
+<br>
+
 ## 🧱 기술 스택
 | 항목 | 버전/도구 |
 | - | - |

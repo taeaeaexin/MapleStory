@@ -8,6 +8,7 @@ services:
       - '27017:27017'
     volumes:
       - mongo-data:/data/db
+
   auth:
     build: ./auth
     ports:
@@ -16,6 +17,15 @@ services:
       - mongo
     environment:
       - MONGO_URI=mongodb://mongo:27017/auth
+
+  gateway:
+    build: ./gateway
+    ports:
+      - '3000:3000'
+    depends_on:
+      - auth
+    environment:
+      - AUTH_URL=http://auth:3000
 
 volumes:
   mongo-data:
