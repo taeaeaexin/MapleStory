@@ -13,6 +13,9 @@ import { RewardRequestsController } from './reward-requests/reward-requests.cont
 import { RewardRequestsService } from './reward-requests/reward-requests.service';
 import { RewardRequestsAdminController } from './reward-requests/reward-requests.admin.controller';
 
+import { APP_GUARD } from '@nestjs/core';
+import { JwtAuthGuard } from './common/jwt-auth.guard';
+import { RolesGuard } from './common/roles.guard';
 
 @Module({
   imports: [
@@ -23,7 +26,26 @@ import { RewardRequestsAdminController } from './reward-requests/reward-requests
       { name: RewardRequest.name, schema: RewardRequestSchema },
     ]),
   ],
-  controllers: [AppController, EventsController, RewardsController, RewardRequestsController, RewardRequestsController, RewardRequestsAdminController],
-  providers: [AppService, EventsService, RewardsService, RewardRequestsService],
+  controllers: [
+    AppController,
+    EventsController,
+    RewardsController,
+    RewardRequestsController,
+    RewardRequestsAdminController,
+  ],
+  providers: [
+    AppService,
+    EventsService,
+    RewardsService,
+    RewardRequestsService,
+    {
+      provide: APP_GUARD,
+      useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard,
+    },
+  ],
 })
 export class AppModule {}
