@@ -36,6 +36,14 @@ export class RewardRequestsService {
         });
     }
 
+    async findAllRequests(userId?: string): Promise<RewardRequest[]> {
+        if (userId) {
+            return this.model.find({ userId }).exec();
+        }
+        return this.model.find().exec();
+    }
+
+
     // 테스트용
     async verifyCondition(condition: string, userId: string): Promise<boolean> {
         switch (condition) {

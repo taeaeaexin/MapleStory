@@ -67,3 +67,4 @@ docker-compose up --build
 | GET | /events | 전체 이벤트 조회 |
 | POST | /events/:id/rewards | 선택 이벤트에 보상 등록 |
 | GET | /events/:id/rewards | 선택 이벤트 보상 목록 조회 |
+| GET | /reward-requests | 보상 요청 이력 조회 (userId 쿼리 지원) |

@@ -1,4 +1,4 @@
-import { Controller, Post, Param, Body } from '@nestjs/common';
+import { Controller, Post, Param, Body, Get, Query } from '@nestjs/common';
 import { RewardRequestsService } from './reward-requests.service';
 
 @Controller('events/:id/reward-request')

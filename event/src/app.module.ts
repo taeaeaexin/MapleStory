@@ -11,6 +11,7 @@ import { RewardsController } from './rewards/rewards.controller';
 import { RewardRequest, RewardRequestSchema } from './reward-requests/schemas/rewrad-request.schema';
 import { RewardRequestsController } from './reward-requests/reward-requests.controller';
 import { RewardRequestsService } from './reward-requests/reward-requests.service';
+import { RewardRequestsAdminController } from './reward-requests/reward-requests.admin.controller';
 
 
 @Module({
@@ -22,7 +23,7 @@ import { RewardRequestsService } from './reward-requests/reward-requests.service
       { name: RewardRequest.name, schema: RewardRequestSchema },
     ]),
   ],
-  controllers: [AppController, EventsController, RewardsController, RewardRequestsController],
+  controllers: [AppController, EventsController, RewardsController, RewardRequestsController, RewardRequestsController, RewardRequestsAdminController],
   providers: [AppService, EventsService, RewardsService, RewardRequestsService],
 })
 export class AppModule {}
