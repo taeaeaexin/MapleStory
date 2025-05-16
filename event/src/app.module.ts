@@ -8,6 +8,9 @@ import { EventsService } from './events/events.service';
 import { Reward, RewardSchema } from './rewards/schemas/reward.schema';
 import { RewardsService } from './rewards/rewards.service';
 import { RewardsController } from './rewards/rewards.controller';
+import { RewardRequest, RewardRequestSchema } from './reward-requests/schemas/rewrad-request.schema';
+import { RewardRequestsController } from './reward-requests/reward-requests.controller';
+import { RewardRequestsService } from './reward-requests/reward-requests.service';
 
 
 @Module({
@@ -16,9 +19,10 @@ import { RewardsController } from './rewards/rewards.controller';
     MongooseModule.forFeature([
       { name: Event.name, schema: EventSchema },
       { name: Reward.name, schema: RewardSchema },
+      { name: RewardRequest.name, schema: RewardRequestSchema },
     ]),
   ],
-  controllers: [AppController, EventsController, RewardsController],
-  providers: [AppService, EventsService, RewardsService],
+  controllers: [AppController, EventsController, RewardsController, RewardRequestsController],
+  providers: [AppService, EventsService, RewardsService, RewardRequestsService],
 })
 export class AppModule {}
