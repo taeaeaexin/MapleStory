@@ -36,7 +36,7 @@ docker-compose up --build
 
 ## 🔧 기능 상세
 
-<b>프로젝트 구조</b>
+<b>🧩 프로젝트 구조</b>
 | 서버 | 역할 |
 | - | - |
 | auth | 유저 등록, 로그인, JWT 발급 |
@@ -45,26 +45,36 @@ docker-compose up --build
 
 <br>
 
+<b>🔐 권한 기반 구조</b>
+| 역할 | 권한 |
+| - | - |
+| USER | 보상 요청 |
+| OPERATOR | 이벤트/보상 등록 및 이력 조회 |
+| ADMIN | 전체 기능 접근 가능 |
+
+<br>
+
 <b>Auth Server</b>
-| Method | URI | 설명 |
-| - | - | - |
-| POST | /signup | 회원가입 |
-| POST | /login | 로그인 |
+| Method | URI | 권한 | 설명 |
+| - | - | - | - |
+| POST | /signup | ALL | 회원가입 |
+| POST | /login | ALL | 로그인 |
 
 <br>
 
 <b>Gateway Server</b>
 | Method | URI | 권한 | 설명 |
 | - | - | - | - |
-| GET | /secure | User, ADMIN | 로그인한 유저만 접근 가능 (JWT 필요) |
+| GET | /secure | USER, ADMIN | 로그인한 유저만 접근 가능 (JWT 필요) |
 
 <br>
 
 <b>Event Server</b>
-| Method | URI | 설명 |
-| - | - | - |
-| POST | /events | 이벤트 등록 |
-| GET | /events | 전체 이벤트 조회 |
-| POST | /events/:id/rewards | 선택 이벤트에 보상 등록 |
-| GET | /events/:id/rewards | 선택 이벤트 보상 목록 조회 |
-| GET | /reward-requests | 보상 요청 이력 조회 (userId 쿼리 지원) |
+| Method | URI | 권한 | 설명 |
+| - | - | - | - |
+| POST | /events | OPERATOR | 이벤트 등록 |
+| GET | /events | ALL | 전체 이벤트 조회 |
+| POST | /events/:id/rewards | OPERATOR | 선택 이벤트에 보상 등록 |
+| GET | /events/:id/rewards | ALL | 선택 이벤트 보상 목록 조회 |
+| POST | /events/:id/reward-request | USER | 유저가 보상 요청 |
+| GET | /reward-requests | OPERATOR, ADMIN | 보상 요청 이력 조회 (userId 쿼리 지원) |
