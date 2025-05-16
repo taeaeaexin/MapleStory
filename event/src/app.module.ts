@@ -16,9 +16,17 @@ import { RewardRequestsAdminController } from './reward-requests/reward-requests
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './common/jwt-auth.guard';
 import { RolesGuard } from './common/roles.guard';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
+import { JwtStrategy } from './common/jwt.strategy';
 
 @Module({
   imports: [
+    PassportModule,
+    JwtModule.register({
+      secret: process.env.JWT_SECRET || 'maplestory-secret',
+      signOptions: { expiresIn: '1d' },
+    }),
     MongooseModule.forRoot(process.env.MONGO_URI || 'mongodb://localhost:27017/event'),
     MongooseModule.forFeature([
       { name: Event.name, schema: EventSchema },
@@ -38,6 +46,7 @@ import { RolesGuard } from './common/roles.guard';
     EventsService,
     RewardsService,
     RewardRequestsService,
+    JwtStrategy,
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
