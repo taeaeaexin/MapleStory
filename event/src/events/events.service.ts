@@ -10,4 +10,8 @@ export class EventsService {
   async createEvent(dto: any): Promise<Event> {
     return this.eventModel.create(dto);
   }
+
+  async findAllEvents(): Promise<Event[]> {
+    return this.eventModel.find().exec();
+  }
 }
