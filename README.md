@@ -11,7 +11,7 @@
 # 루트 디렉토리에서 실행
 docker-compose up --build
 ```
-- Auth Server : http://localhost:3001
+- Auth Server : http://localhost:3000
 - MongoDB : mongodb://mongo:27017/auth (자동 연결)
 
 <br>
