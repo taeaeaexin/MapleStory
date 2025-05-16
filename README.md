@@ -1,5 +1,5 @@
 # 🍄‍ 메이플스토리 이벤트/보상 관리 시스템
-> NestJS 기반 MSA 아키텍처로 구성된 이벤트 보상 시스템  
+> NestJS 기반 MSA 아키텍처 프로젝트
 > MongoDB를 사용하였으며 JWT 인증과 역할 기반 권한 관리를 적용하여 유저, 운영자 등 권한 분리 지원
 
 <br>
@@ -54,7 +54,7 @@ docker-compose up --build
 
 <br>
 
-<b>Auth Server</b>
+<b>🛡️ Auth Server</b>
 | Method | URI | 권한 | 설명 |
 | - | - | - | - |
 | POST | /signup | ALL | 회원가입 |
@@ -62,14 +62,14 @@ docker-compose up --build
 
 <br>
 
-<b>Gateway Server</b>
+<b>🌐 Gateway Server</b>
 | Method | URI | 권한 | 설명 |
 | - | - | - | - |
 | GET | /secure | USER, ADMIN | 로그인한 유저만 접근 가능 (JWT 필요) |
 
 <br>
 
-<b>Event Server</b>
+<b>📢 Event Server</b>
 | Method | URI | 권한 | 설명 |
 | - | - | - | - |
 | POST | /events | OPERATOR | 이벤트 등록 |
@@ -78,3 +78,11 @@ docker-compose up --build
 | GET | /events/:id/rewards | ALL | 선택 이벤트 보상 목록 조회 |
 | POST | /events/:id/reward-request | USER | 유저가 보상 요청 |
 | GET | /reward-requests | OPERATOR, ADMIN | 보상 요청 이력 조회 (userId 쿼리 지원) |
+
+문제 : Gateway를 통해 signup/login 라우팅 프록시 구현 중 ENOTFOUNR 발생
+원인 : 컨테이너 안에서 3001로 요청, 도커 컨테이너끼리는 외부 포트가 아닌 내부 포트 사용해야 함
+해결 : 클라이언트 -> Gateway(3000) -> Auth(3000)로 구조 변경
+
+문제 : 409 Conflict를  500 Internal server error로 return해서 착오가 생김
+원인 : Auth 서버에서는 정상적으로 409 반환(터미널로 확인), Gateway -> Axios 에러를 catch하면서 그냥 500으로 던짐
+해결 : Gateway에서 Axios 오류 상태 그대로 클라이언트에 전달
