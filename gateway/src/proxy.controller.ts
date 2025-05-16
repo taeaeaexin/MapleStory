@@ -23,17 +23,17 @@ export class ProxyController {
         }
     }
 
-  @Post('/login')
-  async login(@Req() req: Request, @Res() res: Response) {
-    try { // 예외처리 추가
-    const result = await firstValueFrom(
-        this.httpService.post('http://auth:3000/login', req.body)
-    );
-    res.status(result.status).send(result.data);
-    } catch (err: any) {
-    const status = err.response?.status || 500;
-    const data = err.response?.data || { message: 'Gateway error' };
-    res.status(status).send(data);
+    @Post('/login')
+    async login(@Req() req: Request, @Res() res: Response) {
+        try { // 예외처리 추가
+            const result = await firstValueFrom(
+                this.httpService.post('http://auth:3000/login', req.body)
+        );
+            res.status(result.status).send(result.data);
+        } catch (err: any) {
+            const status = err.response?.status || 500;
+            const data = err.response?.data || { message: 'Gateway error' };
+            res.status(status).send(data);
+        }
     }
-  }
 }

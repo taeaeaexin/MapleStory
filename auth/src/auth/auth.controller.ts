@@ -35,12 +35,12 @@ export class AuthController {
     const user = await this.usersService.findByEmail(email) as UserDocument;
 
     if (!user) {
-      throw new HttpException('이메일 또는 비밀번호가 틀렸습니다.', HttpStatus.UNAUTHORIZED);
+      throw new HttpException('존재하지 않는 이메일입니다.', HttpStatus.NOT_FOUND);
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      throw new HttpException('이메일 또는 비밀번호가 틀렸습니다.', HttpStatus.UNAUTHORIZED);
+      throw new HttpException('비밀번호가 틀렸습니다.', HttpStatus.UNAUTHORIZED);
     }
 
     const payload = {
