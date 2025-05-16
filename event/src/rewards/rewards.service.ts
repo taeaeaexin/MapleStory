@@ -15,4 +15,8 @@ export class RewardsService {
       eventId,
     });
   }
+
+  async findRewardsByEventId(eventId: string): Promise<Reward[]> {
+    return this.rewardModel.find({ eventId }).exec();
+  }
 }
