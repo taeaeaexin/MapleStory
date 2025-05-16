@@ -1,6 +1,7 @@
 # 🍄‍ 메이플스토리 이벤트/보상 관리 시스템
 > NestJS 기반 MSA 아키텍처 프로젝트
-> MongoDB를 사용하였으며 JWT 인증과 역할 기반 권한 관리를 적용하여 유저, 운영자 등 권한 분리 지원
+> JWT 인증 및 역할 기반 권한 제어 적용
+> 유지보수성, 확장성, 인증 보안을 고려한 설계
 
 <br>
 
@@ -79,10 +80,17 @@ docker-compose up --build
 | POST | /events/:id/reward-request | USER | 유저가 보상 요청 |
 | GET | /reward-requests | OPERATOR, ADMIN | 보상 요청 이력 조회 (userId 쿼리 지원) |
 
-문제 : Gateway를 통해 signup/login 라우팅 프록시 구현 중 ENOTFOUNR 발생
-원인 : 컨테이너 안에서 3001로 요청, 도커 컨테이너끼리는 외부 포트가 아닌 내부 포트 사용해야 함
-해결 : 클라이언트 -> Gateway(3000) -> Auth(3000)로 구조 변경
+<br>
 
-문제 : 409 Conflict를  500 Internal server error로 return해서 착오가 생김
-원인 : Auth 서버에서는 정상적으로 409 반환(터미널로 확인), Gateway -> Axios 에러를 catch하면서 그냥 500으로 던짐
-해결 : Gateway에서 Axios 오류 상태 그대로 클라이언트에 전달
+## 🔍 트러블슈팅
+### 1. ENOTFOUND 에러 Gateway -> Auth 프록시 실패
+- 문제 : Gateway에서 Auth 서버로 요청 시 ENOTFOUNR 발생
+- 원인 : Doker 컨테이너 간 통신에서 외부 포트(3001) 사용
+- 해결 : 클라이언트 -> Gateway(3000) -> Auth(3000)로 구조 변경
+
+<br>
+
+### 2. 409 Conflict -> 500 Error 처리 문제
+- 문제 : 409 Conflict를 500 Internal server error로 return해서 착오가 생김
+- 원인 : Auth 서버에서는 정상적으로 409 반환(터미널로 확인), Gateway -> Axios 에러 핸들러 로직에서 500 반환
+- 해결 : Axios의 status 값을 그대로 클라이언트에 반환
