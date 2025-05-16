@@ -94,3 +94,22 @@ docker-compose up --build
 - 문제 : 409 Conflict를 500 Internal server error로 return해서 착오가 생김
 - 원인 : Auth 서버에서는 정상적으로 409 반환(터미널로 확인), Gateway -> Axios 에러 핸들러 로직에서 500 반환
 - 해결 : Axios의 status 값을 그대로 클라이언트에 반환
+
+<br>
+
+### 3. MSA 구조 위반
+- 문제 : Gateway에서 Event 서버의 Controller를 직접 import하여 Nest 앱이 MSA 경계를 침범
+- 원인 : MSA 구조를 무시하고 Gateway에서 Event의 controller를 import하려 함
+- 해결 : Gateway에서는 Event 서버의 컨트롤러/서비스를 import하지 않고, 오직 httpService로 요청만 위임하도록 구조 정리
+
+<br>
+
+### 4. Error: Socket hang up
+- 문제 : Gateway 서버가 꺼져서 요청을 받지 못해 Socket hang up 발생
+- 원인 : jwt-auth.guard를 Gateway에 import 하다가 NestJS 부팅 시 해당 모듈을 찾지 못해 Gateway 자체가 죽음
+- 해결 : Gateway에는 인증 로직을 직접 사용하지 않고, 인증은 Event 서버에서만 처리하도록 구조 분리
+
+### 5. GET /events → 401 Unauthorized
+- 문제 : 단순 조회 API인 GET /events 요청 시에도 인증이 필요하다고 판단되어 401 Unauthorized 에러 발생
+- 원인 : Event 서버에서 APP_GUARD로 JwtAuthGuard를 전역 적용하여 @UseGuards() 없이도 모든 요청에 인증이 요구됨
+- 해결 : 인증이 필요 없는 라우터에 @Public() 데코레이터를 추가하고, JwtAuthGuard 내부에서 @Public()을 감지해 인증 로직을 생략하도록 수정

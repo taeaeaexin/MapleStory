@@ -2,6 +2,7 @@ import { Body, Controller, Post, Get } from '@nestjs/common';
 import { EventsService } from './events.service';
 import { Roles } from 'src/common/roles.decorator';
 import { Role } from 'src/common/roles.enum';
+import { Public } from 'src/common/public.decorator';
 
 @Controller('events')
 export class EventsController {
@@ -13,6 +14,7 @@ export class EventsController {
     return this.eventsService.createEvent(dto);
   }
 
+  @Public()
   @Get()
   async findAll() {
     return this.eventsService.findAllEvents();

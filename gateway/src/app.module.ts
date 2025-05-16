@@ -7,6 +7,7 @@ import { JwtStrategy } from './common/jwt.strategy';
 import { TestController } from './test/test.controller';
 import { ProxyController } from './proxy.controller';
 import { HttpModule } from '@nestjs/axios';
+import { EventController } from './event.controller';
 
 @Module({
   imports: [
@@ -20,7 +21,8 @@ import { HttpModule } from '@nestjs/axios';
   controllers: [
     AppController,
     TestController,
-    ProxyController
+    ProxyController,
+    EventController,
   ],
   providers: [
     AppService,

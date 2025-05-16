@@ -5,13 +5,21 @@ import { Model } from 'mongoose';
 
 @Injectable()
 export class EventsService {
-  constructor(@InjectModel(Event.name) private eventModel: Model<EventDocument>) {}
+  constructor(@InjectModel(Event.name) private eventModel: Model<EventDocument>) {
+    console.log('injected Event Model:', !!eventModel);
+  }
 
   async createEvent(dto: any): Promise<Event> {
     return this.eventModel.create(dto);
   }
 
   async findAllEvents(): Promise<Event[]> {
-    return this.eventModel.find().exec();
+  try {
+    console.log('model ready?', !!this.eventModel);
+    return await this.eventModel.find().exec();
+  } catch (err) {
+    console.error('Error in findAllEvents:', err.message, err.stack);
+    throw err;
+  }
   }
 }
