@@ -19,6 +19,7 @@ import { RolesGuard } from './common/roles.guard';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './common/jwt.strategy';
+import { EventSeeder } from './seeder/event.seeder';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { JwtStrategy } from './common/jwt.strategy';
     RewardRequestsAdminController,
   ],
   providers: [
+    EventSeeder,
     AppService,
     EventsService,
     RewardsService,
