@@ -117,3 +117,10 @@ docker-compose up --build
 - 문제 : 단순 조회 API인 GET /events 요청 시에도 인증이 필요하다고 판단되어 401 Unauthorized 에러 발생
 - 원인 : Event 서버에서 APP_GUARD로 JwtAuthGuard를 전역 적용하여 @UseGuards() 없이도 모든 요청에 인증이 요구됨
 - 해결 : 인증이 필요 없는 라우터에 @Public() 데코레이터를 추가하고, JwtAuthGuard 내부에서 @Public()을 감지해 인증 로직을 생략하도록 수정
+
+<br>
+
+### 6. seed 실행 시 event._id.toString() → Property '_id' does not exist on type 'Event'.ts(2339)
+- 문제 : seeder에서 event._id.toString() 사용 시 TypeScript 오류 발생
+- 원인 : createEvent()의 반환 타입이 명확하지 않아 event를 단순 Event 타입으로 추론, _id 속성이 없다고 판단함
+- 해결 : 반환값에 EventDocument 타입을 명시하고, 시더 내부에서도 const event: EventDocument = ... 으로 타입 지정하여 _id 인식되도록 수정

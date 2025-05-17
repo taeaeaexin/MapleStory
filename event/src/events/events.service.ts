@@ -9,7 +9,7 @@ export class EventsService {
     console.log('injected Event Model:', !!eventModel);
   }
 
-  async createEvent(dto: any): Promise<Event> {
+  async createEvent(dto: any): Promise<EventDocument> {
     return this.eventModel.create(dto);
   }
 
