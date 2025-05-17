@@ -5,9 +5,10 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './common/jwt.strategy';
 import { TestController } from './test/test.controller';
+import { HttpModule } from '@nestjs/axios';
 import { AuthProxyController } from './auth.proxy.controller';
 import { EventProxyController } from './event.proxy.controller';
-import { HttpModule } from '@nestjs/axios';
+import { RequestProxyController } from './request.proxy.controller';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { HttpModule } from '@nestjs/axios';
     TestController,
     AuthProxyController,
     EventProxyController,
+    RequestProxyController,
   ],
   providers: [
     AppService,

@@ -7,7 +7,7 @@ import { Role } from 'src/common/roles.enum';
 export class RewardRequestsAdminController {
   constructor(private readonly service: RewardRequestsService) {}
 
-  @Roles(Role.OPERATOR, Role.ADMIN)
+  @Roles(Role.OPERATOR, Role.ADMIN, Role.AUDITOR)
   @Get()
   async findAll(@Query('userId') userId?: string) {
     return this.service.findAllRequests(userId);
