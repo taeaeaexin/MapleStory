@@ -14,7 +14,7 @@ export class RequestProxyController {
     const res = await firstValueFrom(
       this.httpService.get('http://event:3000/reward-requests', {
         headers: { Authorization: token },
-        params: userId ? { userId } : {},
+        params: userId ? { userId } : {}, // 쿼리 필터링 지원
       }),
     );
     return res.data;
