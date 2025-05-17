@@ -2,6 +2,7 @@ import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { RewardsService } from './rewards.service';
 import { Roles } from 'src/common/roles.decorator';
 import { Role } from 'src/common/roles.enum';
+import { Public } from 'src/common/public.decorator';
 
 @Controller('events/:id/rewards')
 export class RewardsController {
@@ -13,6 +14,7 @@ export class RewardsController {
     return this.rewardsService.createReward(eventId, dto);
   }
 
+  @Public()
   @Get()
   async findAll(@Param('id') eventId: string) {
     return this.rewardsService.findRewardsByEventId(eventId);

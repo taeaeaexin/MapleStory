@@ -30,6 +30,19 @@ export class EventProxyController {
     return res.data;
   }
 
+  @Get(':id/rewards')
+  async getRewards(@Req() req: any) {
+    const eventId = req.params.id;
+    const token = req.headers.authorization;
+    const res = await firstValueFrom(
+      this.httpService.get(`http://event:3000/events/${eventId}/rewards`, {
+        headers: { Authorization: token },
+      }),
+    );
+    return res.data;
+  }
+
+
   @Post(':id/rewards')
   async createReward(@Req() req: any, @Body() body: any) {
     const eventId = req.params.id;
@@ -41,5 +54,4 @@ export class EventProxyController {
     );
     return res.data;
   }
-
 }
