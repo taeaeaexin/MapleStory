@@ -124,3 +124,41 @@ docker-compose up --build
 - 문제 : seeder에서 event._id.toString() 사용 시 TypeScript 오류 발생
 - 원인 : createEvent()의 반환 타입이 명확하지 않아 event를 단순 Event 타입으로 추론, _id 속성이 없다고 판단함
 - 해결 : 반환값에 EventDocument 타입을 명시하고, 시더 내부에서도 const event: EventDocument = ... 으로 타입 지정하여 _id 인식되도록 수정
+
+# 내일 할 일
+http://localhost:3000/events/6828a04e2986bf1889edf21a/rewards
+{
+    "statusCode": 500,
+    "message": "Internal server error"
+}
+0) base write gen: 12"}}}
+gateway-1  | [Nest] 37  - 05/17/2025, 2:57:16 PM   ERROR [ExceptionsHandler] Request failed with status code 403
+gateway-1  | AxiosError: Request failed with status code 403
+gateway-1  |     at settle (/app/node_modules/axios/lib/core/settle.js:19:12)
+gateway-1  |     at IncomingMessage.handleStreamEnd (/app/node_modules/axios/lib/adapters/http.js:599:11)
+gateway-1  |     at IncomingMessage.emit (node:events:529:35)
+gateway-1  |     at endReadableNT (node:internal/streams/readable:1400:12)
+gateway-1  |     at process.processTicksAndRejections (node:internal/process/task_queues:82:21)
+gateway-1  |     at Axios.request (/app/node_modules/axios/lib/core/Axios.js:45:41)
+gateway-1  |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+mongo      | {"t":{"$date":"2025-05-17T14:58:02.535+00:00"},"s":"I",  "c":"WTCHKPT",  "id":22430,   "ctx":"Checkpointer","msg":"WiredTiger message","attr":{"message":{"ts_sec":1747493882,"ts_usec":534983,"thread":"1:0x7f2d8a7db6c0","session_name":"WT_SESSION.checkpoint","category":"WT_VERB_CHECKPOINT_PROGRESS","category_id":7,"verbose_level":"DEBUG_1","verbose_level_id":1,"msg":"saving checkpoint snapshot min: 25, snapshot max: 25 snapshot count: 0, oldest timestamp: (0, 0) , meta checkpoint timestamp: (0, 0) base write gen: 12"}}}
+
+http://localhost:3000/reward-requests?userId=maple_user@maple.com
+{
+    "statusCode": 500,
+    "message": "Internal server error"
+}gateway-1  | [Nest] 37  - 05/17/2025, 2:59:00 PM   ERROR [ExceptionsHandler] Request failed with status code 403
+gateway-1  | AxiosError: Request failed with status code 403
+gateway-1  |     at settle (/app/node_modules/axios/lib/core/settle.js:19:12)
+gateway-1  |     at IncomingMessage.handleStreamEnd (/app/node_modules/axios/lib/adapters/http.js:599:11)
+gateway-1  |     at IncomingMessage.emit (node:events:529:35)
+gateway-1  |     at endReadableNT (node:internal/streams/readable:1400:12)
+gateway-1  |     at process.processTicksAndRejections (node:internal/process/task_queues:82:21)
+gateway-1  |     at Axios.request (/app/node_modules/axios/lib/core/Axios.js:45:41)
+gateway-1  |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+mongo      | {"t":{"$date":"2025-05-17T14:59:02.548+00:00"},"s":"I",  "c":"WTCHKPT",  "id":22430,   "ctx":"Checkpointer","msg":"WiredTiger message","attr":{"message":{"ts_sec":1747493942,"ts_usec":548271,"thread":"1:0x7f2d8a7db6c0","session_name":"WT_SESSION.checkpoint","category":"WT_VERB_CHECKPOINT_PROGRESS","category_id":7,"verbose_level":"DEBUG_1","verbose_level_id":1,"msg":"saving checkpoint snapshot min: 26, snapshot max: 26 snapshot count: 0, oldest timestamp: (0, 0) , meta checkpoint timestamp: (0, 0) base write gen: 12"}}}
+
+1. 보상 요청 에러
+2. 보상 요청 이력 조회 에러
+3. 보상 조건 달성했는지 어떻게 판단? -> 유저 status? inventory에 보상 조건 저장하게하고 postman으로 수정요청해서 aomunt status 변경하기
+User ID (이메일 말고) 없음
