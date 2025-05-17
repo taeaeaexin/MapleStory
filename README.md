@@ -109,6 +109,8 @@ docker-compose up --build
 - 원인 : jwt-auth.guard를 Gateway에 import 하다가 NestJS 부팅 시 해당 모듈을 찾지 못해 Gateway 자체가 죽음
 - 해결 : Gateway에는 인증 로직을 직접 사용하지 않고, 인증은 Event 서버에서만 처리하도록 구조 분리
 
+<br>
+
 ### 5. GET /events → 401 Unauthorized
 - 문제 : 단순 조회 API인 GET /events 요청 시에도 인증이 필요하다고 판단되어 401 Unauthorized 에러 발생
 - 원인 : Event 서버에서 APP_GUARD로 JwtAuthGuard를 전역 적용하여 @UseGuards() 없이도 모든 요청에 인증이 요구됨
