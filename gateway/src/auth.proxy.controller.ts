@@ -6,7 +6,7 @@ import { Request, Response } from 'express';
 import { firstValueFrom } from 'rxjs';
 
 @Controller()
-export class ProxyController {
+export class AuthProxyController {
   constructor(private readonly httpService: HttpService) {}
 
     @Post('/signup')

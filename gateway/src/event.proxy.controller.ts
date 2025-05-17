@@ -9,9 +9,8 @@ import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 
 @Controller('events')
-export class EventController {
+export class EventProxyController {
   constructor(private readonly httpService: HttpService) {}
-
   @Get()
   async getEvents() {
     const res = await firstValueFrom(
@@ -30,4 +29,17 @@ export class EventController {
     );
     return res.data;
   }
+
+  @Post(':id/rewards')
+  async createReward(@Req() req: any, @Body() body: any) {
+    const eventId = req.params.id;
+    const token = req.headers.authorization;
+    const res = await firstValueFrom(
+      this.httpService.post(`http://event:3000/events/${eventId}/rewards`, body, {
+        headers: { Authorization: token },
+      }),
+    );
+    return res.data;
+  }
+
 }
