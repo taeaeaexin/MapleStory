@@ -19,7 +19,7 @@ export class UserSeeder implements OnModuleInit {
       { email: 'maple_admin@maple.com', password: '1234', role: Role.ADMIN },
       { email: 'maple_operator@maple.com', password: '1234', role: Role.OPERATOR },
       { email: 'maple_auditor@maple.com', password: '1234', role: Role.AUDITOR },
-      { email: 'amaple_user@maple.com', password: '1234', role: Role.USER },
+      { email: 'maple_user@maple.com', password: '1234', role: Role.USER },
     ];
 
     for (const { email, password, role } of users) {
