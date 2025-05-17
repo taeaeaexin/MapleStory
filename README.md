@@ -17,9 +17,11 @@ docker-compose up --build
 <br>
 
 ## 🧠 설계 의도
-- MSA 구조로 auth, event, gateway를 분리하여 유지보수성과 확장성 높임
-- JWT 왜 사용? Role 기반 권한 분리
-- 이벤트 설계, 조건 검증 방식, API 구조 선택 이유, 구현 중 겪은 고민 등
+- 모든 요구사항을 반영해 기능을 구현하되, 이후 확장 및 유지보수를 고려하여 설계
+- Gateway가 API 요청 진입점이며 인증과 라이팅 역할
+- NestJS의 AuthGuard, RoleGuard, @Roles()를 활용해 역할 기반 접근 제어 명확히 분리
+- 이벤트는 condition, amount, unit으로 유연하게 정의 가능
+- 보상 요청 시 조건 만족 여부와 중복 여부를 서버에서 판단해 처리
 
 <br>
 
