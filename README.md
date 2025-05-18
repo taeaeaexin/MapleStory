@@ -1,7 +1,7 @@
-# 🍄‍ 메이플스토리 이벤트/보상 관리 시스템
-> NestJS 기반 MSA 아키텍처 프로젝트  
-> JWT 인증 및 역할 기반 권한 제어 적용  
-> 유지보수성, 확장성, 인증 보안을 고려한 설계
+# 🍄‍ 메이플스토리 이벤트 보상 관리 시스템
+> 운영자는 이벤트와 보상을 정의할 수 있습니다.  
+> 유저는 조건을 만족하면 보상 요청을 하고 상태에 따라 자동 지급/거부가 됩니다.  
+> 권한에 따라 보상 요청 내역 조회가 가능합니다.
 
 <br>
 
@@ -29,7 +29,7 @@ docker-compose up --build
 | 항목 | 버전/도구 |
 | - | - |
 | 언어 | TypeScript |
-| 런타임 | Node.js 18 |
+| 런타임 | Node.js v18 |
 | 프레임워크 | NestJS 최신 |
 | DB | MongoDB |
 | 인증 | JWT + Passport |
@@ -42,9 +42,9 @@ docker-compose up --build
 <b>🧩 프로젝트 구조</b>
 | 서버 | 역할 |
 | - | - |
-| auth | 유저 등록, 로그인, JWT 발급 |
-| gateway | API 요청 진입 + 인증/인가 |
-| event | (이벤트 등록 / 이벤트 관련) |
+| Gateway | API 요청 진입, 인증/인가, 각 서버로 라우팅 |
+| Auth | 회원가입, 로그인, JWT 발급, Role 관리 |
+| Event | 이벤트 등록, 보상 등록, 보상 요청 및 이력 관리 |
 
 <br>
 
@@ -133,22 +133,11 @@ docker-compose up --build
 - 원인: JwtStrategy의 validate()에서 반환한 객체에 sub이 아닌 userId 필드로 설정했기 때문에 req.user.sub는 존재하지 않았음
 - 해결: validate()에서 sub 필드를 그대로 반환하도록 수정하여 req.user.sub로 접근 가능하게 만들었음
 
-# 내일 할 일
-http://localhost:3000/reward-requests?userId=maple_user@maple.com
-{
-    "statusCode": 500,
-    "message": "Internal server error"
-}gateway-1  | [Nest] 37  - 05/17/2025, 2:59:00 PM   ERROR [ExceptionsHandler] Request failed with status code 403
-gateway-1  | AxiosError: Request failed with status code 403
-gateway-1  |     at settle (/app/node_modules/axios/lib/core/settle.js:19:12)
-gateway-1  |     at IncomingMessage.handleStreamEnd (/app/node_modules/axios/lib/adapters/http.js:599:11)
-gateway-1  |     at IncomingMessage.emit (node:events:529:35)
-gateway-1  |     at endReadableNT (node:internal/streams/readable:1400:12)
-gateway-1  |     at process.processTicksAndRejections (node:internal/process/task_queues:82:21)
-gateway-1  |     at Axios.request (/app/node_modules/axios/lib/core/Axios.js:45:41)
-gateway-1  |     at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
-mongo      | {"t":{"$date":"2025-05-17T14:59:02.548+00:00"},"s":"I",  "c":"WTCHKPT",  "id":22430,   "ctx":"Checkpointer","msg":"WiredTiger message","attr":{"message":{"ts_sec":1747493942,"ts_usec":548271,"thread":"1:0x7f2d8a7db6c0","session_name":"WT_SESSION.checkpoint","category":"WT_VERB_CHECKPOINT_PROGRESS","category_id":7,"verbose_level":"DEBUG_1","verbose_level_id":1,"msg":"saving checkpoint snapshot min: 26, snapshot max: 26 snapshot count: 0, oldest timestamp: (0, 0) , meta checkpoint timestamp: (0, 0) base write gen: 12"}}}
+# 할 일
+1. 보상 조건 달성 여부 + 요청 상태(성공/실패) 기록 내역
+2. 요청 이력 필터링(이벤트별, 상태별)
+3. 역할에 따른 권한 마지막 확인
+4. 테스트코드 작성
+5. read me 작성 및 가이드 작성
 
-2. 보상 요청 이력 조회 에러
-3. 보상 조건 달성했는지 어떻게 판단? -> 유저 status? inventory에 보상 조건 저장하게하고 postman으로 수정요청해서 aomunt status 변경하기
-User ID (이메일 말고) 없음
++시간 남으면 이벤트 목록 조회 업그레이드 (이벤트 이름 -> 이벤트 상세 (개요/보상))
