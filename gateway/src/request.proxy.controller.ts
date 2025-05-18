@@ -2,12 +2,12 @@ import { HttpService } from "@nestjs/axios";
 import { Controller, Get, Req } from "@nestjs/common";
 import { firstValueFrom } from "rxjs";
 
-@Controller('reward-requests')
+@Controller()
 export class RequestProxyController {
   constructor(private readonly httpService: HttpService) {}
 
   /* 보상 요청 이력 조회 (AUDITOR, ADMIN, OPERATOR) */
-  @Get()
+  @Get('/reward-requests')
   async getRewardRequests(@Req() req: any) {
     const token = req.headers.authorization;
     const userId = req.query.userId;
