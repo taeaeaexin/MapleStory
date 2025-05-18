@@ -6,7 +6,7 @@ import { firstValueFrom } from "rxjs";
 export class RequestProxyController {
   constructor(private readonly httpService: HttpService) {}
 
-  /* 보상 요청 이력 조회 (USER, AUDITOR, ADMIN) */
+  /* 보상 요청 이력 조회 (AUDITOR, ADMIN, OPERATOR) */
   @Get()
   async getRewardRequests(@Req() req: any) {
     const token = req.headers.authorization;
@@ -15,6 +15,18 @@ export class RequestProxyController {
       this.httpService.get('http://event:3000/reward-requests', {
         headers: { Authorization: token },
         params: userId ? { userId } : {}, // 쿼리 필터링 지원
+      }),
+    );
+    return res.data;
+  }
+
+  /* 내 보상 요청 이력 조회 (USER) */
+  @Get('/my-reward-requests')
+  async getMyRewardRequests(@Req() req: any) {
+    const token = req.headers.authorization;
+    const res = await firstValueFrom(
+      this.httpService.get('http://event:3000/my-reward-requests', {
+        headers: { Authorization: token },
       }),
     );
     return res.data;
