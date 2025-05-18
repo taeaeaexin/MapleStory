@@ -133,6 +133,13 @@ docker-compose up --build
 - 원인: JwtStrategy의 validate()에서 반환한 객체에 sub이 아닌 userId 필드로 설정했기 때문에 req.user.sub는 존재하지 않았음
 - 해결: validate()에서 sub 필드를 그대로 반환하도록 수정하여 req.user.sub로 접근 가능하게 만들었음
 
+<br>
+
+### 8. @Req()에서 유저 인벤토리를 조회하는 대신, 클라이언트가 직접 인벤토리를 제출하도록 구조 변경
+- 문제: 보상 조건 검증을 위해 유저의 inventory를 조회 -> N+1 쿼리 문제 발생
+- 원인: RewardRequest는 유저 ID만 가지고 있고, inventory는 User에서 별도 조회해야 해서 User.findById()가 반복 호출 됨
+- 해결: 유저가 보상 요청을 할 때 자신의 inventory를 @Body()로 함께 보내도록 구조 변경 (N+1 -> O(1)로 우회)
+
 # 할 일
 1. 보상 조건 달성 여부 + 요청 상태(성공/실패) 기록 내역
 2. 요청 이력 필터링(이벤트별, 상태별)

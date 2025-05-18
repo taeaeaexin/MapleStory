@@ -55,16 +55,14 @@ export class EventProxyController {
 
   /* 보상 요청 (USER) */
   @Post(':id/reward-request')
-  async requestReward(@Req() req: any) {
+  async requestReward(@Req() req: any, @Body() body: any) {
     const eventId = req.params.id;
     const token = req.headers.authorization;
     const res = await firstValueFrom(
     this.httpService.post(
       `http://event:3000/events/${eventId}/reward-request`,
-      { }, // body 없음. 유저 ID는 JWT에서 추출되므로 Event Server에서 처리
-      {
-        headers: { Authorization: token },
-      },
+      body,
+      { headers: {Authorization:token} }, // body 없음. 유저 ID는 JWT에서 추출되므로 Event Server에서 처리 -> 였는데 body에서 inventory를 가져와야하는걸로 변경
     ),
   );
   return res.data;

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { RewardRequest, RewardRequestDocument } from './schemas/rewrad-request.schema';
 import { Model } from 'mongoose';
@@ -6,12 +6,12 @@ import { Event, EventDocument } from 'src/events/schemas/events.schema';
 
 @Injectable()
 export class RewardRequestsService {
-  constructor(
+    constructor(
         @InjectModel(RewardRequest.name) private model: Model<RewardRequestDocument>,
         @InjectModel(Event.name) private eventModel: Model<EventDocument>,
     ) {}
 
-    async requestReward(userId: string, eventId: string): Promise<RewardRequest> {
+    async requestReward(userId: string, eventId: string, inventory: Record<string, number>): Promise<RewardRequest> {
         if (!userId) {
             throw new Error('userId is not exist');
         }
@@ -31,7 +31,7 @@ export class RewardRequestsService {
             throw new Error('존재하지 않는 이벤트입니다.');
         }
 
-        const passed = await this.verifyCondition(event.condition, userId);
+        const passed = this.verifyCondition(event.condition, event.amount, event.unit, inventory);
 
         return this.model.create({
             userId,
@@ -41,26 +41,32 @@ export class RewardRequestsService {
         });
     }
 
-    async findAllRequests(userId?: string): Promise<RewardRequest[]> {
-        if (userId) {
-            return this.model.find({ userId }).exec();
+    verifyCondition(
+        condition: string,
+        amount: number,
+        unit: string,
+        inventory: Record<string, number>
+    ): boolean {
+        console.log('검증:', { condition, amount, unit, inventory });
+
+        if (!inventory || typeof inventory !== 'object') {
+            console.error('inventory가 없음 또는 잘못됨:', inventory);
+            return false;
         }
-        return this.model.find().exec();
+
+        const userAmount = inventory[condition];
+        if (typeof userAmount !== 'number') {
+            console.warn(`inventory에 [${condition}] 없음`);
+            return false;
+        }
+
+        console.log(`유저 보유 수량: ${userAmount}, 필요 수량: ${amount}`);
+        return userAmount >= amount;
     }
 
-    // 테스트용
-    async verifyCondition(condition: string, userId: string): Promise<boolean> {
-        switch (condition) {
-            case 'login7days':
-            // id taesin (임시)
-            return userId === 'taesin';
-
-            case 'invite3friends':
-            // 향후 구현 가능성 고려
-            return false;
-
-            default:
-            return false;
-        }
+    async findAllRequests(userId?: string): Promise<RewardRequest[]> {
+        return userId
+        ? this.model.find({ userId }).exec()
+        : this.model.find().exec();
     }
 }

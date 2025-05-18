@@ -14,8 +14,8 @@ export class RewardRequestsController {
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(Role.USER)
   @Post()
-  async requestReward(@Param('id') eventId: string, @Req() req: any) {
-    const userId = req.user.userId;
-    return this.service.requestReward(userId, eventId);
+  async requestReward( @Req() req, @Param('id') eventId: string, @Body() body: { inventory: Record<string, number> }) {
+    const userId = req.user.sub;
+    return this.service.requestReward(userId, eventId, body.inventory);
   }
 }

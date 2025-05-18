@@ -20,6 +20,13 @@ export class User {
 
   @Prop({ enum: Role, default: Role.USER })
   role: Role;
+  
+  /**
+   * 인벤토리: 조건 아이템별 보유 수량
+   * ex) 출석x3, 친구초대x2
+   */
+  @Prop({ type: Map, of: Number, default: {} })
+  inventory: Map<string, number>;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

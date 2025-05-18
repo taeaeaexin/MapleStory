@@ -20,7 +20,7 @@ export class EventSeeder implements OnModuleInit {
             description: '7일을 접속하면 보상을 드려요!',
             condition: 'login',
             amount: 7,
-            unit: 'days',
+            unit: '일', //단위
             status: 'ACTIVE',
         });
         await this.rewardsService.createReward(LoginEvent._id.toString(), {
@@ -34,8 +34,8 @@ export class EventSeeder implements OnModuleInit {
             title: '어버이날 초대 이벤트',
             description: '친구 2명을 초대하면 보상을 드려요!',
             condition: 'invite',
-            amount: 3,
-            unit: 'friends',
+            amount: 2,
+            unit: '명', //단위
             status: 'ACTIVE',
         });
         await this.rewardsService.createReward(InviteEvent._id.toString(), {
@@ -49,8 +49,8 @@ export class EventSeeder implements OnModuleInit {
             title: '스승의날 사냥 이벤트',
             description: '1000마리를 사냥하면 보상을 드려요!',
             condition: 'kill',
-            amount: 7,
-            unit: 'monsters',
+            amount: 1000,
+            unit: '마리', //단위
             status: 'ACTIVE',
         });
         await this.rewardsService.createReward(HuntEvent._id.toString(), {
