@@ -14,10 +14,15 @@ export class AppController {
     return this.appService.getHello();
   }
 
+  // jwt 인증 + role 확인 + userId 확인
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles(Role.USER, Role.ADMIN)
-  @Get('secure')
+  @Get('information')
   getSecureData(@Request() req): string {
-    return `Hello ${req.user.email}, your role is ${req.user.role}`;
+    return `
+    Email : ${req.user.email}
+    Role : ${req.user.role}
+    user ID : ${req.user.userId}
+    `;
   }
 }

@@ -24,10 +24,16 @@ export class RequestProxyController {
   @Get('/my-reward-requests')
   async getMyRewardRequests(@Req() req: any) {
     const token = req.headers.authorization;
+    const { status, eventId } = req.query;
     const res = await firstValueFrom(
       this.httpService.get('http://event:3000/my-reward-requests', {
         headers: { Authorization: token },
+        params: {
+          ...(status && { status }),
+          ...(eventId && { eventId }),
+        },
       }),
+      
     );
     return res.data;
   }

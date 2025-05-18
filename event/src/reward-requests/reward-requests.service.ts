@@ -84,13 +84,22 @@ export class RewardRequestsService {
     }: {
         userId?: string;
         eventId?: string;
-        status?: string;
+        status?: string | string[];
     }) {
         const filter: any = {};
         if (userId) filter.userId = userId;
         if (eventId) filter.eventId = eventId;
-        if (status) filter.status = status;
 
+        const statusValue = Array.isArray(status) ? status[0] : status;
+
+        if (typeof statusValue === 'string') {
+            const cleaned = statusValue.trim().toUpperCase();
+            if (['APPROVED', 'REJECTED', 'PENDING'].includes(cleaned)) {
+                filter.status = cleaned;
+            }
+        }
+
+        console.log('[FILTER]', filter); //제발제발
         return this.model.find(filter);
     }
 }
