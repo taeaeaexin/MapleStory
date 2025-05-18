@@ -21,10 +21,12 @@ import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './common/jwt.strategy';
 import { EventSeeder } from './seeder/event.seeder';
 import { RewardRequestsUserController } from './reward-requests/reward-requests.user.controller';
+import { HttpModule } from '@nestjs/axios';
 
 @Module({
   imports: [
     PassportModule,
+    HttpModule,
     JwtModule.register({
       secret: process.env.JWT_SECRET || 'maplestory-secret',
       signOptions: { expiresIn: '1d' },

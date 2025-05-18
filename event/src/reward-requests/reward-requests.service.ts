@@ -1,7 +1,7 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { RewardRequest, RewardRequestDocument } from './schemas/rewrad-request.schema';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Event, EventDocument } from 'src/events/schemas/events.schema';
 
 @Injectable()
@@ -35,7 +35,7 @@ export class RewardRequestsService {
                 } as RewardRequest;
             }
 
-            // REJECTRED 재요청 허용 (조건 만족 못했을 시 재시도)
+            // REJECTED 재요청 허용 (조건 만족 못했을 시 재시도)
         }
 
         console.log('[eventModel is]', this.eventModel);
@@ -78,8 +78,9 @@ export class RewardRequestsService {
     }
 
     async findAllRequests(userId?: string): Promise<RewardRequest[]> {
-        return userId
-        ? this.model.find({ userId }).exec()
-        : this.model.find().exec();
+        if (userId) {
+            return this.model.find({ userId }).exec();
+        }
+        return this.model.find().exec();
     }
 }
