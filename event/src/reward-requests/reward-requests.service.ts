@@ -77,10 +77,20 @@ export class RewardRequestsService {
         return userAmount >= amount;
     }
 
-    async findAllRequests(userId?: string): Promise<RewardRequest[]> {
-        if (userId) {
-            return this.model.find({ userId }).exec();
-        }
-        return this.model.find().exec();
+    async findAllRequests({
+        userId,
+        eventId,
+        status,
+    }: {
+        userId?: string;
+        eventId?: string;
+        status?: string;
+    }) {
+        const filter: any = {};
+        if (userId) filter.userId = userId;
+        if (eventId) filter.eventId = eventId;
+        if (status) filter.status = status;
+
+        return this.model.find(filter);
     }
 }

@@ -17,8 +17,13 @@ export class RewardRequestsAdminController {
 
   // 보상 요청 이력 보기 (관리자 전용)
   // + userId -> email 조회 (편의성) - 1시간 훨씬넘게 구현하다가 실패
+  // - userId, eventId, status로 필터링
   @Get()
-  async findAll(@Query('userId') userId?: string) {
-    return this.service.findAllRequests(userId);
+  async findAll(
+    @Query('userId') userId?: string,
+    @Query('eventId') eventId?: string,
+    @Query('status') status?: string,
+  ) {
+    return this.service.findAllRequests({ userId, eventId, status });
   }
 }

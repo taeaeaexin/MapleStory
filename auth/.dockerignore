@@ -5,6 +5,7 @@ dist
 Dockerfile
 docker-compose.yml
 README.md
+.env
 *.log
 .idea
 .vscode

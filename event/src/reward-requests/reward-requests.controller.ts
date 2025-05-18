@@ -18,4 +18,16 @@ export class RewardRequestsController {
     const userId = req.user.sub;
     return this.service.requestReward(userId, eventId, body.inventory);
   }
+
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.USER)
+  @Get()
+  async getMyRequest(
+    @Req() req,
+    @Param('id') eventId: string,
+    @Query('status') status?: string, // 선택사항
+  ) {
+    const userId = req.user.sub;
+    return this.service.findAllRequests({ userId, eventId, status });
+  }
 }
