@@ -80,8 +80,8 @@ docker-compose up --build
 | POST | /events/:id/rewards | OPERATOR | 선택 이벤트에 보상 등록 |
 | GET | /events/:id/rewards | ALL | 선택 이벤트 보상 목록 조회 |
 | POST | /events/:id/reward-request | USER | 유저가 보상 요청 |
-| GET | /reward-requests | OPERATOR, ADMIN, AUDITOR | 보상 요청 이력 조회 (userId 조회 가능) |
-| GET | /my-reward-requests | USER | 본인 보상 요청 이력 조회 |
+| GET | /reward-requests | OPERATOR, ADMIN, AUDITOR | 보상 요청 이력 조회 (Filter: userId, eventId, status) |
+| GET | /my-reward-requests | USER | 본인 보상 요청 이력 조회 (Filter: eventId, status)|
 
 <br>
 

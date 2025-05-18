@@ -11,7 +11,7 @@ import { RewardRequestsService } from "./reward-requests.service";
 export class RewardRequestsUserController {
   constructor(private readonly service: RewardRequestsService) {}
 
-   @Get()
+  @Get()
   async getMyRewardRequests(@Req() req) {
     const userId = req.user.sub;
 
