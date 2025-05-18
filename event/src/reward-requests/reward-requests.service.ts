@@ -16,13 +16,26 @@ export class RewardRequestsService {
             throw new Error('userId is not exist');
         }
 
-        const exists = await this.model.findOne({ userId, eventId });
-        if (exists) {
-            return {
-                ...exists.toObject(),
-                status: 'REJECTED',
-                reason: '이미 요청한 이벤트입니다.',
-            } as RewardRequest;
+        const existing = await this.model.findOne({ userId, eventId }).sort({ createdAt: -1 }); // 최신 요청 이력
+
+        if (existing) {
+            if (existing.status === 'APPROVED') {
+                return {
+                    ...existing.toObject(),
+                    status: 'REJECTED',
+                    reason: '이미 참여한 이벤트입니다.',
+                } as RewardRequest;
+            }
+
+            if (existing.status === 'PENDING') {
+                return {
+                    ...existing.toObject(),
+                    status: 'REJECTED',
+                    reason: '이벤트 처리 대기중입니다.',
+                } as RewardRequest;
+            }
+
+            // REJECTRED 재요청 허용 (조건 만족 못했을 시 재시도)
         }
 
         console.log('[eventModel is]', this.eventModel);
