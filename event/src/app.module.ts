@@ -20,6 +20,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './common/jwt.strategy';
 import { EventSeeder } from './seeder/event.seeder';
+import { RewardRequestsUserController } from './reward-requests/reward-requests.user.controller';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { EventSeeder } from './seeder/event.seeder';
     RewardsController,
     RewardRequestsController,
     RewardRequestsAdminController,
+    RewardRequestsUserController,
   ],
   providers: [
     EventSeeder,
