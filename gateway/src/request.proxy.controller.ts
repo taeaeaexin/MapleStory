@@ -10,7 +10,7 @@ export class RequestProxyController {
   @Get('/reward-requests')
   async getRewardRequests(@Req() req: any) {
     const token = req.headers.authorization;
-    const { userId, eventId, status } = req.query;  // ✅ 쿼리 모두 받기
+    const { userId, eventId, status } = req.query;  // 쿼리 모두 받기
     const res = await firstValueFrom(
       this.httpService.get('http://event:3000/reward-requests', {
         headers: { Authorization: token },

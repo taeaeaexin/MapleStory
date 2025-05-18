@@ -8,7 +8,7 @@ import { EventsService } from './events/events.service';
 import { Reward, RewardSchema } from './rewards/schemas/reward.schema';
 import { RewardsService } from './rewards/rewards.service';
 import { RewardsController } from './rewards/rewards.controller';
-import { RewardRequest, RewardRequestSchema } from './reward-requests/schemas/rewrad-request.schema';
+import { RewardRequest, RewardRequestSchema } from './reward-requests/schemas/reward-request.schema';
 import { RewardRequestsController } from './reward-requests/reward-requests.controller';
 import { RewardRequestsService } from './reward-requests/reward-requests.service';
 import { RewardRequestsAdminController } from './reward-requests/reward-requests.admin.controller';

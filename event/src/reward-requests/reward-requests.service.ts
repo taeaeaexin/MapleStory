@@ -1,6 +1,6 @@
 import { ConflictException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { RewardRequest, RewardRequestDocument } from './schemas/rewrad-request.schema';
+import { RewardRequest, RewardRequestDocument } from './schemas/reward-request.schema';
 import { Model, Types } from 'mongoose';
 import { Event, EventDocument } from 'src/events/schemas/events.schema';
 
