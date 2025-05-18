@@ -2,16 +2,20 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { RewardRequest, RewardRequestDocument } from './schemas/rewrad-request.schema';
 import { Model } from 'mongoose';
-import { EventDocument } from 'src/events/schemas/events.schema';
+import { Event, EventDocument } from 'src/events/schemas/events.schema';
 
 @Injectable()
 export class RewardRequestsService {
   constructor(
-    @InjectModel(RewardRequest.name) private model: Model<RewardRequestDocument>,
-    @InjectModel(Event.name) private eventModel: Model<EventDocument>,
-  ) {}
+        @InjectModel(RewardRequest.name) private model: Model<RewardRequestDocument>,
+        @InjectModel(Event.name) private eventModel: Model<EventDocument>,
+    ) {}
 
     async requestReward(userId: string, eventId: string): Promise<RewardRequest> {
+        if (!userId) {
+            throw new Error('userId is not exist');
+        }
+
         const exists = await this.model.findOne({ userId, eventId });
         if (exists) {
             return {
@@ -21,7 +25,8 @@ export class RewardRequestsService {
             } as RewardRequest;
         }
 
-        const event = await this.eventModel.findById(eventId);
+        console.log('[eventModel is]', this.eventModel);
+        const event = await this.eventModel.findById(eventId); // RewardRequest validation failed: userId: Path `userId` is required.
         if (!event) {
             throw new Error('존재하지 않는 이벤트입니다.');
         }

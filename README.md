@@ -125,6 +125,11 @@ docker-compose up --build
 - 원인 : createEvent()의 반환 타입이 명확하지 않아 event를 단순 Event 타입으로 추론, _id 속성이 없다고 판단함
 - 해결 : 반환값에 EventDocument 타입을 명시하고, 시더 내부에서도 const event: EventDocument = ... 으로 타입 지정하여 _id 인식되도록 수정
 
+### 7. seed 실행 시 event._id.toString() → Property '_id' does not exist on type 'Event'.ts(2339)
+- 문제 : seeder에서 event._id.toString() 사용 시 TypeScript 오류 발생
+- 원인 : createEvent()의 반환 타입이 명확하지 않아 event를 단순 Event 타입으로 추론, _id 속성이 없다고 판단함
+- 해결 : 반환값에 EventDocument 타입을 명시하고, 시더 내부에서도 const event: EventDocument = ... 으로 타입 지정하여 _id 인식되도록 수정
+
 # 내일 할 일
 http://localhost:3000/events/6828a04e2986bf1889edf21a/rewards
 {
