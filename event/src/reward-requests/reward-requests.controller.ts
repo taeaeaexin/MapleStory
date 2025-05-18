@@ -10,6 +10,7 @@ export class RewardRequestsController {
   constructor(private readonly service: RewardRequestsService) {}
 
   // jwt에서 userid 추출하기 위해서 AuthGuard 적용 필요
+  // user 보상 요청
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(Role.USER)
   @Post()

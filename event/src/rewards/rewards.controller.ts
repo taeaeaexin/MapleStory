@@ -8,12 +8,14 @@ import { Public } from 'src/common/public.decorator';
 export class RewardsController {
   constructor(private readonly rewardsService: RewardsService) {}
 
+  // OPERATOR만 보상 생성 가능
   @Roles(Role.OPERATOR)
   @Post()
   async create(@Param('id') eventId: string, @Body() dto: any) {
     return this.rewardsService.createReward(eventId, dto);
   }
 
+  // 이벤트 보상은 jwt가 없어도 누구나 볼 수 있음
   @Public()
   @Get()
   async findAll(@Param('id') eventId: string) {

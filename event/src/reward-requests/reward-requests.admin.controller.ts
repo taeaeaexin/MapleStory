@@ -7,6 +7,7 @@ import { Role } from 'src/common/roles.enum';
 export class RewardRequestsAdminController {
   constructor(private readonly service: RewardRequestsService) {}
 
+  // 보상 요청 이력 보기 (관리자 전용)
   @Roles(Role.OPERATOR, Role.ADMIN, Role.AUDITOR)
   @Get()
   async findAll(@Query('userId') userId?: string) {
