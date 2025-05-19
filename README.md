@@ -15,7 +15,8 @@ docker-compose up --build
 - MongoDB : mongodb://mongo:27017
 <details>
   <summary>상세 실행 방법</summary>
-
+  
+  ## 실행 방법
   1. MapleStory(root dir)에서 CMD 실행
   2. 'docker-compose up --build' 입력
   3. 이후 Postman으로 진행
@@ -131,65 +132,81 @@ docker-compose up --build
 ### 1. ENOTFOUND 에러 Gateway -> Auth 프록시 실패
 <details>
   <summary> details </summary>
-  - 문제 : Gateway에서 Auth 서버로 요청 시 ENOTFOUNR 발생<br>
-  - 원인 : Doker 컨테이너 간 통신에서 외부 포트(3001) 사용<br>
+  
+  - 문제 : Gateway에서 Auth 서버로 요청 시 ENOTFOUNR 발생
+  - 원인 : Doker 컨테이너 간 통신에서 외부 포트(3001) 사용
   - 해결 : 클라이언트 -> Gateway(3000) -> Auth(3000)로 구조 변경
+    
 </details>
 
 ### 2. 409 Conflict -> 500 Error 처리 문제
 <details>
   <summary> details </summary>
-  - 문제 : 409 Conflict를 500 Internal server error로 return해서 착오가 생김<br>
-  - 원인 : Auth 서버에서는 정상적으로 409 반환(터미널로 확인), Gateway -> Axios 에러 핸들러 로직에서 500 반환<br>
+  
+  - 문제 : 409 Conflict를 500 Internal server error로 return해서 착오가 생김
+  - 원인 : Auth 서버에서는 정상적으로 409 반환(터미널로 확인), Gateway -> Axios 에러 핸들러 로직에서 500 반환
   - 해결 : Axios의 status 값을 그대로 클라이언트에 반환
+    
 </details>
 
 ### 3. MSA 구조 위반
 <details>
   <summary> details </summary>
-  - 문제 : Gateway에서 Event 서버의 Controller를 직접 import하여 Nest 앱이 MSA 경계를 침범<br>
-  - 원인 : MSA 구조를 무시하고 Gateway에서 Event의 controller를 import하려 함<br>
+  
+  - 문제 : Gateway에서 Event 서버의 Controller를 직접 import하여 Nest 앱이 MSA 경계를 침범
+  - 원인 : MSA 구조를 무시하고 Gateway에서 Event의 controller를 import하려 함
   - 해결 : Gateway에서는 Event 서버의 컨트롤러/서비스를 import하지 않고, 오직 httpService로 요청만 위임하도록 구조 정리
+    
 </details>
 
 ### 4. Error: Socket hang up
 <details>
   <summary> details </summary>
-  - 문제 : Gateway 서버가 꺼져서 요청을 받지 못해 Socket hang up 발생<br>
-  - 원인 : jwt-auth.guard를 Gateway에 import 하다가 NestJS 부팅 시 해당 모듈을 찾지 못해 Gateway 자체가 죽음<br>
+  
+  - 문제 : Gateway 서버가 꺼져서 요청을 받지 못해 Socket hang up 발생
+  - 원인 : jwt-auth.guard를 Gateway에 import 하다가 NestJS 부팅 시 해당 모듈을 찾지 못해 Gateway 자체가 죽음
   - 해결 : Gateway에는 인증 로직을 직접 사용하지 않고, 인증은 Event 서버에서만 처리하도록 구조 분리
+    
 </details>
 
 ### 5. GET /events → 401 Unauthorized
 <details>
   <summary> details </summary>
-  - 문제 : 단순 조회 API인 GET /events 요청 시에도 인증이 필요하다고 판단되어 401 Unauthorized 에러 발생<br>
-  - 원인 : Event 서버에서 APP_GUARD로 JwtAuthGuard를 전역 적용하여 @UseGuards() 없이도 모든 요청에 인증이 요구됨<br>
+  
+  - 문제 : 단순 조회 API인 GET /events 요청 시에도 인증이 필요하다고 판단되어 401 Unauthorized 에러 발생
+  - 원인 : Event 서버에서 APP_GUARD로 JwtAuthGuard를 전역 적용하여 @UseGuards() 없이도 모든 요청에 인증이 요구됨
   - 해결 : 인증이 필요 없는 라우터에 @Public() 데코레이터를 추가하고, JwtAuthGuard 내부에서 @Public()을 감지해 인증 로직을 생략하도록 수정
+    
 </details>
 
 ### 6. seed 실행 시 event._id.toString() → Property '_id' does not exist on type 'Event'.ts(2339)
 <details>
   <summary> details </summary>
-  - 문제 : seeder에서 event._id.toString() 사용 시 TypeScript 오류 발생<br>
-  - 원인 : createEvent()의 반환 타입이 명확하지 않아 event를 단순 Event 타입으로 추론, _id 속성이 없다고 판단함<br>
+  
+  - 문제 : seeder에서 event._id.toString() 사용 시 TypeScript 오류 발생
+  - 원인 : createEvent()의 반환 타입이 명확하지 않아 event를 단순 Event 타입으로 추론, _id 속성이 없다고 판단함
   - 해결 : 반환값에 EventDocument 타입을 명시하고, 시더 내부에서도 const event: EventDocument = ... 으로 타입 지정하여 _id 인식되도록 수정
+    
 </details>
 
 ### 7. @Body()를 @Req()로 변경하면서 userId 추출 실패
 <details>
   <summary> details </summary>
-  - 문제: @Body()에서 userId를 받던 코드를 @Req()로 바꾸면서 req.user.sub 사용 → undefined 발생<br>
-  - 원인: JwtStrategy의 validate()에서 반환한 객체에 sub이 아닌 userId 필드로 설정했기 때문에 req.user.sub는 존재하지 않았음<br>
+  
+  - 문제: @Body()에서 userId를 받던 코드를 @Req()로 바꾸면서 req.user.sub 사용 → undefined 발생
+  - 원인: JwtStrategy의 validate()에서 반환한 객체에 sub이 아닌 userId 필드로 설정했기 때문에 req.user.sub는 존재하지 않았음
   - 해결: validate()에서 sub 필드를 그대로 반환하도록 수정하여 req.user.sub로 접근 가능하게 만들었음
+    
 </details>
 
 ### 8. @Req()에서 유저 인벤토리를 조회하는 대신, 클라이언트가 직접 인벤토리를 제출하도록 구조 변경
 <details>
   <summary> details </summary>
-  - 문제: 보상 조건 검증을 위해 유저의 inventory를 조회 -> N+1 쿼리 문제 발생<br>
-  - 원인: RewardRequest는 유저 ID만 가지고 있고, inventory는 User에서 별도 조회해야 해서 User.findById()가 반복 호출 됨<br>
+  
+  - 문제: 보상 조건 검증을 위해 유저의 inventory를 조회 -> N+1 쿼리 문제 발생
+  - 원인: RewardRequest는 유저 ID만 가지고 있고, inventory는 User에서 별도 조회해야 해서 User.findById()가 반복 호출 됨
   - 해결: 유저가 보상 요청을 할 때 자신의 inventory를 @Body()로 함께 보내도록 구조 변경 (N+1 -> O(1)로 우회)
+    
 </details>
 
 <br>
@@ -199,16 +216,19 @@ docker-compose up --build
 ### 1. 수정 기능 부재
 <details>
   <summary> details </summary>
+  
 </details>
 
 ### 2. 테스트코드 부재
 <details>
   <summary> details </summary>
+  
 </details>
 
 ### 3. Swagger 누락
 <details>
   <summary> details </summary>
+  
 </details>
 
 ### 4. 예외 처리 미흡
