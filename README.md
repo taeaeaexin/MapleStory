@@ -5,6 +5,16 @@
 
 <br>
 
+## 📑 목차
+- [실행 방법](#-실행-방법-docker-compose-기준)
+- [설계 의도](#-설계-의도)
+- [기술 스택](#-기술-스택)
+- [기능 상세](#-기능-상세)
+- [트러블슈팅](#-트러블슈팅)
+- [한계점](#-한계점)
+
+<br>
+
 ## 🔧 실행 방법 (Docker Compose 기준)
 
 ```bash
@@ -45,6 +55,7 @@ docker-compose up --build
   | - | - | - | - | - |
   | ALL | GET | /events/'_id'/rewards |  | 선택 이벤트 보상 목록 조회 ('_id' 삽입) |
   | OPERATOR, ADMIN | POST | /events/'_id'/rewards | {"rewardType": "ITEM","name": "이블윙즈","amount": 1} | 선택 이벤트 보상 등록 |
+  - _id는 GET /events API에서 이벤트 id를 받아와 삽입
 
   ## Request-rewards
   | Role | Method | URI | Json | Detail |
@@ -52,6 +63,7 @@ docker-compose up --build
   | USER | POST | /events/'_id'/reward-request | {"inventory":{"login": 7}} | 이벤트에 따라 contition과 amount가 다름 (예시는 로그인 이벤트) |
   | OPERATOR, ADMIN | GET | /reward-requests |  | 유저 보상 요청 이력 조회 (Filter: userId, eventId, status) |
   | USER | GET | /my-reward-requests |  | 본인 보상 요청 이력 조회 (Filter: eventId, status) |
+  - Parameter로 Filter 가능 
   
 </details>
 
