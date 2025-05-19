@@ -49,10 +49,8 @@ docker-compose up --build
   | Role | Method | URI | Json | Detail |
   | - | - | - | - | - |
   | USER | POST | /events/'_id'/reward-request | {"inventory":{"login": 7}} | 이벤트에 따라 contition과 amount가 다름 (예시는 로그인 이벤트) |
-  - Sedd 설정 되어있음 위 데이터로 로그인
-  - 발급된 Token을 Authrization -> Bearer Toekn에 입력 후 진행
-  - /signup (회원가입) : 동일 json으로 가입 (User role만 가입 가능)
-  - /information (정보) : 로그인 중인 정보 조회 (Email, Role, UserId)
+  | OPERATOR, ADMIN | GET | /reward-requests |  | 유저 보상 요청 이력 조회 (Filter: userId, eventId, status) |
+  | USER | GET | /my-reward-requests |  | 본인 보상 요청 이력 조회 (Filter: eventId, status) |
   
 </details>
 
