@@ -1,7 +1,7 @@
 # 🍄‍ 메이플스토리 이벤트 보상 관리 시스템
 > 운영자는 이벤트와 보상을 정의할 수 있습니다.  
 > 유저는 조건을 만족하면 보상 요청을 하고 상태에 따라 자동 지급/거부가 됩니다.  
-> 권한에 따라 보상 요청 내역 조회가 가능합니다.
+> 역할에 따라 보상 요청 내역 조회 권한이 구분됩니다.
 
 <br>
 
@@ -11,17 +11,17 @@
 # 루트 디렉토리에서 실행
 docker-compose up --build
 ```
-- Auth Server : http://localhost:3000
+- Gateway Server : http://localhost:3000
 - MongoDB : mongodb://mongo:27017/auth (자동 연결)
 
 <br>
 
 ## 🧠 설계 의도
 - 모든 요구사항을 반영해 기능을 구현하되, 이후 확장 및 유지보수를 고려하여 설계
-- Gateway가 API 요청 진입점이며 인증과 라이팅 역할
-- NestJS의 AuthGuard, RoleGuard, @Roles()를 활용해 역할 기반 접근 제어 명확히 분리
-- 이벤트는 condition, amount, unit으로 유연하게 정의 가능
-- 보상 요청 시 조건 만족 여부와 중복 여부를 서버에서 판단해 처리
+- Gateway가 API 요청의 진입점으로 구성하여 JWT 인증 및 역할 기반 접근 제어 중앙 처리
+- NestJS의 AuthGuard, RoleGuard, @Roles()를 활용해 권한을 명확히 분리
+- 이벤트 조건을 condition, amount, unit 필드로 구성하여 유연하게 정의 가능
+- 보상 요청 시 조건 만족 여부, 중복 여부를 서버에서 판단해 처리
 
 <br>
 
@@ -43,32 +43,33 @@ docker-compose up --build
 | 서버 | 역할 |
 | - | - |
 | Gateway | API 요청 진입, 인증/인가, 각 서버로 라우팅 |
-| Auth | 회원가입, 로그인, JWT 발급, Role 관리 |
-| Event | 이벤트 등록, 보상 등록, 보상 요청 및 이력 관리 |
+| Auth | 회원가입, 로그인, JWT 발급, 역할(Role) 관리 |
+| Event | 이벤트 등록, 보상 등록, 유저 보상 요청/처리/저장/조회 |
 
 <br>
 
 <b>🔐 권한 기반 구조</b>
 | 역할 | 권한 |
 | - | - |
-| USER | 보상 요청 |
-| OPERATOR | 이벤트/보상 등록 및 이력 조회 |
+| USER | 보상 요청, 본인 보상 요청 이력 조회 가능 |
+| OPERATOR | 이벤트/보상 등록, 보상 요청 이력 조회 가능 |
 | ADMIN | 전체 기능 접근 가능 |
-
-<br>
-
-<b>🛡️ Auth Server</b>
-| Method | URI | 권한 | 설명 |
-| - | - | - | - |
-| POST | /signup | ALL | 회원가입 |
-| POST | /login | ALL | 로그인 |
+| AUDITOR | 요청 이력 조회만 가능 |
 
 <br>
 
 <b>🌐 Gateway Server</b>
 | Method | URI | 권한 | 설명 |
 | - | - | - | - |
-| GET | /secure | USER, ADMIN | 로그인한 유저만 접근 가능 (JWT 필요) |
+| GET | /information | ALL | Email, Role, UserId 조회 (JWT 필요) |
+
+<br>
+
+<b>🛡️ Auth Server</b>
+| Method | URI | 권한 | 설명 |
+| - | - | - | - |
+| POST | /signup | ALL | 회원가입 (User 권한만 부여 가능) |
+| POST | /login | ALL | 로그인 |
 
 <br>
 
