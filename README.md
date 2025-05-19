@@ -12,7 +12,29 @@
 docker-compose up --build
 ```
 - Gateway Server : http://localhost:3000
-- MongoDB : mongodb://mongo:27017/auth (자동 연결)
+- MongoDB : mongodb://mongo:27017
+<details>
+  <summary>상세 실행 방법</summary>
+
+  1. MapleStory(root dir)에서 CMD 실행
+  2. 'docker-compose up --build' 입력
+  3. 이후 Postman으로 진행
+
+  ## Login
+  | Role | Method | URI | Json |
+  | - | - | - | - |
+  | User | POST | /login | {"email":"maple_user@maple.com", "password":"1234"} |
+  | OPERATOR | POST | /login | {"email":"maple_operator@maple.com", "password":"1234"} |
+  | AUDITOR | POST | /login | {"email":"maple_auditor@maple.com", "password":"1234"} |
+  | ADMIN | POST | /login | {"email":"maple_admin@maple.com", "password":"1234"} |
+  - Sedd 설정 되어있음 위 데이터로 로그인
+  - 발급된 Token을 Authrization -> Bearer Toekn에 입력 후 진행
+  - /signup (회원가입) : 동일 json으로 가입 (User role만 가입 가능)
+  - /information (정보) : 로그인 중인 정보 조회 (Email, Role, UserId)
+
+  ## Login
+  
+</details>
 
 <br>
 
@@ -154,7 +176,7 @@ docker-compose up --build
 
 <br>
 
-## 🔍 한계점
+## ⏳ 한계점
 
 ### 1. 수정 기능 부재
 <details>
@@ -167,6 +189,11 @@ docker-compose up --build
 </details>
 
 ### 3. Swagger 누락
+<details>
+  <summary> details </summary>
+</details>
+
+### 4. 예외 처리 미흡
 <details>
   <summary> details </summary>
 </details>
