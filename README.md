@@ -21,18 +21,38 @@ docker-compose up --build
   3. 이후 Postman으로 진행
 
   ## Login
-  | Role | Method | URI | Json |
-  | - | - | - | - |
-  | User | POST | /login | {"email":"maple_user@maple.com", "password":"1234"} |
-  | OPERATOR | POST | /login | {"email":"maple_operator@maple.com", "password":"1234"} |
-  | AUDITOR | POST | /login | {"email":"maple_auditor@maple.com", "password":"1234"} |
-  | ADMIN | POST | /login | {"email":"maple_admin@maple.com", "password":"1234"} |
-  - Sedd 설정 되어있음 위 데이터로 로그인
+  | Role | Method | URI | Json | Detail |
+  | - | - | - | - | - |
+  | User | POST | /login | {"email":"maple_user@maple.com", "password":"1234"} | User 로그인 (seed 있음) |
+  | OPERATOR | POST | /login | {"email":"maple_operator@maple.com", "password":"1234"} | Operator 로그인 (seed 있음) |
+  | AUDITOR | POST | /login | {"email":"maple_auditor@maple.com", "password":"1234"} | Auditor 로그인 (seed 있음) |
+  | ADMIN | POST | /login | {"email":"maple_admin@maple.com", "password":"1234"} | Admin 로그인 (seed 있음) |
+  - Seed 설정 되어있음 위 데이터로 로그인
   - 발급된 Token을 Authrization -> Bearer Toekn에 입력 후 진행
   - /signup (회원가입) : 동일 json으로 가입 (User role만 가입 가능)
   - /information (정보) : 로그인 중인 정보 조회 (Email, Role, UserId)
 
-  ## Login
+  ## Events
+  | Role | Method | URI | Json | Detail |
+  | - | - | - | - | - |
+  | ALL | GET | /events |  | 이벤트 목록 조회 ('_id' 획득) |
+  | OPERATOR, ADMIN | POST | /events | {"title": "이벤트 내용","description": "이벤트 내용","condition": "login","amount": 7,"unit": "일"} | 이벤트 등록 |
+  - createdAt, status는 default 값 설정 되어있음
+
+  ## Rewards
+  | Role | Method | URI | Json | Detail |
+  | - | - | - | - | - |
+  | ALL | GET | /events/'_id'/rewards |  | 선택 이벤트 보상 목록 조회 ('_id' 삽입) |
+  | OPERATOR, ADMIN | POST | /events/'_id'/rewards | {"rewardType": "ITEM","name": "이블윙즈","amount": 1} | 선택 이벤트 보상 등록 |
+
+  ## Request-rewards
+  | Role | Method | URI | Json | Detail |
+  | - | - | - | - | - |
+  | USER | POST | /events/'_id'/reward-request | {"inventory":{"login": 7}} | 이벤트에 따라 contition과 amount가 다름 (예시는 로그인 이벤트) |
+  - Sedd 설정 되어있음 위 데이터로 로그인
+  - 발급된 Token을 Authrization -> Bearer Toekn에 입력 후 진행
+  - /signup (회원가입) : 동일 json으로 가입 (User role만 가입 가능)
+  - /information (정보) : 로그인 중인 정보 조회 (Email, Role, UserId)
   
 </details>
 
