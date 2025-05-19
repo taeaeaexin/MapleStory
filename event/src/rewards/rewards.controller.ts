@@ -8,8 +8,8 @@ import { Public } from 'src/common/public.decorator';
 export class RewardsController {
   constructor(private readonly rewardsService: RewardsService) {}
 
-  // OPERATOR만 보상 생성 가능
-  @Roles(Role.OPERATOR)
+  // OPERATOR만 보상 생성 가능 -> +ADMIN 추가
+  @Roles(Role.OPERATOR, Role.ADMIN)
   @Post()
   async create(@Param('id') eventId: string, @Body() dto: any) {
     return this.rewardsService.createReward(eventId, dto);

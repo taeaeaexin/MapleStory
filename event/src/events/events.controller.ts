@@ -8,8 +8,8 @@ import { Public } from 'src/common/public.decorator';
 export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 
-  // OPERATOR만 이벤트 생성 가능
-  @Roles(Role.OPERATOR)
+  // OPERATOR만 이벤트 생성 가능 -> +ADMIN 추가
+  @Roles(Role.OPERATOR, Role.ADMIN)
   @Post()
   async create(@Body() dto: any) {
     return this.eventsService.createEvent(dto);

@@ -9,7 +9,7 @@ import { AxiosResponse } from 'axios';
 
 @Controller('reward-requests')
 @UseGuards(AuthGuard('jwt'), RolesGuard)
-@Roles(Role.ADMIN, Role.OPERATOR, Role.AUDITOR)
+@Roles(Role.ADMIN, Role.AUDITOR) // OPERATOR 제거
 export class RewardRequestsAdminController {
   constructor(
     private readonly service: RewardRequestsService,

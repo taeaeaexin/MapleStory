@@ -52,9 +52,9 @@ docker-compose up --build
 | 역할 | 권한 |
 | - | - |
 | USER | 보상 요청, 본인 보상 요청 이력 조회 가능 |
-| OPERATOR | 이벤트/보상 등록, 보상 요청 이력 조회 가능 |
-| ADMIN | 전체 기능 접근 가능 |
-| AUDITOR | 요청 이력 조회만 가능 |
+| OPERATOR | 이벤트/보상 등록 |
+| AUDITOR | 보상 요청 이력 조회만 가능 |
+| ADMIN | 모든 기능 접근 가능 |
 
 <br>
 
@@ -76,12 +76,12 @@ docker-compose up --build
 <b>📢 Event Server</b>
 | Method | URI | 권한 | 설명 |
 | - | - | - | - |
-| POST | /events | OPERATOR | 이벤트 등록 |
-| GET | /events | ALL | 전체 이벤트 조회 |
-| POST | /events/:id/rewards | OPERATOR | 선택 이벤트에 보상 등록 |
+| POST | /events | OPERATOR, ADMIN | 이벤트 등록 |
+| GET | /events | ALL | 이벤트 목록 조회 |
+| POST | /events/:id/rewards | OPERATOR, ADMIN | 선택 이벤트에 보상 등록 |
 | GET | /events/:id/rewards | ALL | 선택 이벤트 보상 목록 조회 |
-| POST | /events/:id/reward-request | USER | 유저가 보상 요청 |
-| GET | /reward-requests | OPERATOR, ADMIN, AUDITOR | 보상 요청 이력 조회 (Filter: userId, eventId, status) |
+| POST | /events/:id/reward-request | USER | 보상 요청 (조건에 따라 자동으로 보상 지급 여부 판단) |
+| GET | /reward-requests | OPERATOR, ADMIN | 유저 보상 요청 이력 조회 (Filter: userId, eventId, status) |
 | GET | /my-reward-requests | USER | 본인 보상 요청 이력 조회 (Filter: eventId, status)|
 
 <br>
@@ -140,3 +140,9 @@ docker-compose up --build
 - 문제: 보상 조건 검증을 위해 유저의 inventory를 조회 -> N+1 쿼리 문제 발생
 - 원인: RewardRequest는 유저 ID만 가지고 있고, inventory는 User에서 별도 조회해야 해서 User.findById()가 반복 호출 됨
 - 해결: 유저가 보상 요청을 할 때 자신의 inventory를 @Body()로 함께 보내도록 구조 변경 (N+1 -> O(1)로 우회)
+
+## 🔍 한계점
+
+### 1. 수정 기능
+테스트코드
+분기 상세히 나누지 못한 점 (예외 처리)

@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { EventsService } from 'src/events/events.service'
 import { getModelToken } from '@nestjs/mongoose';
-import { Event } from 'src/events/schemas/events.schema';
+import { Event, EventDocument } from 'src/events/schemas/events.schema';
 import { Model } from 'mongoose';
 
 describe('EventsService', () => {
